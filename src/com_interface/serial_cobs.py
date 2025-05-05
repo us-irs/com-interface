@@ -33,6 +33,16 @@ class SerialCobsComIF(SerialComBase, ComInterface):
         self._serial_ring_buf = collections.deque()
         self._parse_buffer = bytearray()
 
+    def encode_data(self, data: bytes | bytearray) -> bytearray:
+        """Encodes the data using the COBS protocol.
+        :param data: Data to encode.
+        :return: Encoded data.
+        """
+        encoded = bytearray([0])
+        encoded.extend(cobs.encode(data))
+        encoded.append(0)
+        return encoded
+
     @property
     def id(self) -> str:
         return self.ser_cfg.com_if_id
@@ -60,10 +70,7 @@ class SerialCobsComIF(SerialComBase, ComInterface):
     def send(self, data: bytes | bytearray) -> None:
         """This function encodes all data using the :py:func:`cobs.cobs.encode` function."""
         assert self.serial is not None
-        encoded = bytearray([0])
-        encoded.extend(cobs.encode(data))
-        encoded.append(0)
-        self.serial.write(encoded)
+        self.serial.write(self.encode_data(data))
 
     def receive(self, parameters: Any = 0) -> list[bytes]:
         packet_list = []
