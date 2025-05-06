@@ -8,7 +8,7 @@ from typing import Any
 
 from cobs import cobs
 
-from com_interface import ComInterface, ReceptionDecodeError
+from com_interface import ComInterface
 from com_interface.serial_base import SerialCfg, SerialComBase, SerialCommunicationType
 
 
@@ -32,6 +32,7 @@ class SerialCobsComIF(SerialComBase, ComInterface):
         self._packet_deque = collections.deque()
         self._serial_ring_buf = collections.deque()
         self._parse_buffer = bytearray()
+        self.parsing_error_count = 0
 
     def encode_data(self, data: bytes | bytearray) -> bytearray:
         """Encodes the data using the COBS protocol.
@@ -79,8 +80,7 @@ class SerialCobsComIF(SerialComBase, ComInterface):
             packet_list.append(self._packet_deque.pop())
         return packet_list
 
-    def data_available(self, parameters: Any = 0) -> int:
-        # TODO: Timeout feature.
+    def packets_available(self, parameters: Any = 0) -> int:
         self._parse_for_packets()
         return self._packet_deque.__len__()
 
@@ -106,8 +106,8 @@ class SerialCobsComIF(SerialComBase, ComInterface):
                         packet = cobs.decode(self._parse_buffer[start_idx + 1 : idx])
                         if len(packet) > 0:
                             self._packet_deque.appendleft(packet)
-                    except cobs.DecodeError as e:
-                        raise ReceptionDecodeError(f"COBS decoding error: {e}", e) from e
+                    except cobs.DecodeError:
+                        self.parsing_error_count += 1
                     self._parse_buffer = self._parse_buffer[idx + 1 :]
                     if len(self._parse_buffer) > 0:
                         self._parsing_algorithm()

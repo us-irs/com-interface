@@ -35,7 +35,7 @@ class TestSerialCobsInterface(TestCase):
 
     def _test_state(self):
         self.assertTrue(self._cobs_if.is_open())
-        self.assertEqual(self._cobs_if.data_available(0), 0)
+        self.assertEqual(self._cobs_if.packets_available(0), 0)
         self.assertEqual(self._cobs_if.id, "pseudo_ser_cobs")
 
     def _test_send(self):
@@ -62,7 +62,7 @@ class TestSerialCobsInterface(TestCase):
         os.write(self._pty_master, full_data_to_send)
         # Give the receiver thread some time to do its work.
         time.sleep(0.15)
-        self.assertEqual(self._cobs_if.data_available(0), 1)
+        self.assertEqual(self._cobs_if.packets_available(0), 1)
         packet_list = self._cobs_if.receive()
         self.assertEqual(len(packet_list), 1)
         # Received data should be decoded now
@@ -85,7 +85,7 @@ class TestSerialCobsInterface(TestCase):
         os.write(self._pty_master, full_data_to_send)
         # Give the receiver thread some time to do its work.
         time.sleep(0.15)
-        self.assertEqual(self._cobs_if.data_available(0), 2)
+        self.assertEqual(self._cobs_if.packets_available(0), 2)
         packet_list = self._cobs_if.receive()
         self.assertEqual(len(packet_list), 2)
         # Received data should be decoded now

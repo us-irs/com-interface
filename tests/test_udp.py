@@ -32,7 +32,7 @@ class TestUdpIf(TestCase):
         sender_addr = self._simple_send(data)
         self.udp_server.sendto(data, sender_addr)
         time.sleep(0.05)
-        self.assertTrue(self.udp_client.data_available())
+        self.assertTrue(self.udp_client.packets_available())
         data_recv = self.udp_client.receive()
         self.assertEqual(len(data_recv), 1)
         self.assertEqual(data_recv[0], data)

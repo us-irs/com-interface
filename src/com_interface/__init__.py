@@ -80,12 +80,12 @@ class ComInterface(ABC):
         return []
 
     @abstractmethod
-    def data_available(self, parameters: Any = 0) -> int:
-        """Poll whether TM packets are available.
+    def packets_available(self, parameters: Any = 0) -> int:
+        """Poll whether packets are available.
 
         :param parameters: Can be an arbitrary parameter.
         :raises ReceptionDecodeError: If the underlying COM interface uses encoding and
             decoding when determining the number of available packets, this exception can be
             thrown on decoding errors.
-        :return: 0 if no data is available, number of packets otherwise.
+        :return: Number of packets available.
         """
