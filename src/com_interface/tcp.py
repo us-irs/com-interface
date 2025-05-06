@@ -225,7 +225,7 @@ class TcpSpacepacketsClient(ComInterface):
             #       logs that there might be an issue reading packets
         self.__tm_queue.put(bytes(bytes_recvd))
 
-    def data_available(self, parameters: Any = 0) -> int:
+    def packets_available(self, parameters: Any = 0) -> int:
         self.__tm_queue_to_packet_list()
         return len(self._tm_packet_list)
 

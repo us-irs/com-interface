@@ -74,7 +74,7 @@ class UdpClient(ComInterface):
         if bytes_sent != len(data):
             _LOGGER.warning("Not all bytes were sent!")
 
-    def data_available(self, parameters: Any = 0) -> bool:
+    def packets_available(self, parameters: Any = 0) -> bool:
         if self.udp_socket is None:
             return False
         ready = select.select([self.udp_socket], [], [], 0)
@@ -85,7 +85,7 @@ class UdpClient(ComInterface):
         if self.udp_socket is None:
             return packet_list
         try:
-            while self.data_available():
+            while self.packets_available() > 0:
                 data, sender_addr = self.udp_socket.recvfrom(4096)
                 packet_list.append(bytearray(data))
             return packet_list

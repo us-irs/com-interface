@@ -103,5 +103,5 @@ class SerialDleComIF(SerialComBase, ComInterface):
                 self.logger.warning("DLE decoder error!")
         return packet_list
 
-    def data_available(self, timeout: float, parameters: any = 0) -> int:
+    def packets_available(self, parameters: any = 0) -> int:
         return self.__reception_buffer.__len__()

@@ -85,7 +85,7 @@ class TestTcpIf(TestCase):
         packet = self.server_received_packets.pop()
         self.assertEqual(packet, self.ping_reply.pack())
         # Now assert that a ping reply was sent back to the client if a ping command was sent
-        self.assertEqual(self.tcp_client.data_available(), 1)
+        self.assertEqual(self.tcp_client.packets_available(), 1)
         recvd_packets = self.tcp_client.receive()
         self.assertEqual(len(recvd_packets), 1)
         self.assertEqual(recvd_packets[0], self.ping_reply.pack())
@@ -104,7 +104,7 @@ class TestTcpIf(TestCase):
         self.assertEqual(packet_1, self.ping_reply.pack())
 
         # Now assert that a ping reply was sent back to the client if a ping command was sent
-        self.assertEqual(self.tcp_client.data_available(), 1)
+        self.assertEqual(self.tcp_client.packets_available(), 1)
         recvd_packets = self.tcp_client.receive()
         self.assertEqual(len(recvd_packets), 1)
         self.assertEqual(recvd_packets[0], self.ping_reply.pack())

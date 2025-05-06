@@ -39,7 +39,7 @@ class TestSerialDleInterface(TestCase):
 
     def test_state(self):
         self.assertTrue(self._DLE_IF.is_open())
-        self.assertEqual(self._DLE_IF.data_available(0), 0)
+        self.assertEqual(self._DLE_IF.packets_available(0), 0)
         self.assertEqual(self._DLE_IF.id, "pseudo_ser_dle")
 
     def test_send(self):
@@ -56,7 +56,7 @@ class TestSerialDleInterface(TestCase):
         os.write(self._PTY_MASTER, encoded_test_data)
         # Give the receiver thread some time to do its work.
         time.sleep(0.1)
-        self.assertEqual(self._DLE_IF.data_available(0), 1)
+        self.assertEqual(self._DLE_IF.packets_available(0), 1)
         packet_list = self._DLE_IF.receive()
         self.assertEqual(len(packet_list), 1)
         # Received data should be decoded now
