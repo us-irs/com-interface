@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 # [unreleased]
 
-# [v0.2.0]
+# [v0.2.0] 2025-05-10
 
 - Renamed `data_available` to `packets_available`
 
